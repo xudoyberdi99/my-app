@@ -3,8 +3,16 @@ import './App.css'
 import AppInfo from '../app-info/app-info'
 import AppFilter from '../app-filter/app-filter'
 import SearchPanel from '../search-panel/search-panel'
+import MovieList from '../move-list/move-list'
+import MoviesAddForm from '../movies-add-form/movies-add-form'
 
 const App = () => {
+	const data = [
+		{ name: 'Empire of usman', viewers: 111, fauorite: true },
+		{ name: 'Ertugrul', viewers: 122, fauorite: false },
+		{ name: 'Abdulhamidxon II', viewers: 1000, fauorite: false },
+	]
+
 	return (
 		<div className='app font-monospace'>
 			<div className='content'>
@@ -13,6 +21,8 @@ const App = () => {
 					<SearchPanel />
 					<AppFilter />
 				</div>
+				<MovieList data={data} />
+				<MoviesAddForm />
 			</div>
 		</div>
 	)
