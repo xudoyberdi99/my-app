@@ -1,7 +1,7 @@
-import './move-list.css'
 import MovieListItem from '../movie-list-item/movie-list-item'
+import './move-list.css'
 
-const MovieList = ({ data }) => {
+const MovieList = ({ data, onDelete, onToggleFavourite, onToggleLike }) => {
 	console.log(data)
 
 	return (
@@ -12,6 +12,9 @@ const MovieList = ({ data }) => {
 					name={item.name}
 					viewers={item.viewers}
 					fauorite={item.fauorite}
+					onDelete={() => onDelete(item.id)}
+					onToggleFavourite={() => onToggleFavourite(item.id)}
+					onToggleLike={() => onToggleLike(item.id)}
 				/>
 			))}
 		</ul>

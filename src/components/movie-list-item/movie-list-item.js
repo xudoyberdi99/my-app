@@ -21,8 +21,9 @@ class MovieListItem extends Component {
 			like: !prevState.like,
 		}))
 	}
+
 	render() {
-		const { name, viewers } = this.props
+		const { name, viewers, onToggleLike, onToggleFavourite } = this.props
 		const { fauorite, like } = this.state
 
 		return (
@@ -31,7 +32,7 @@ class MovieListItem extends Component {
 					fauorite && 'increase'
 				}  ${like && 'like'}`}
 			>
-				<span onClick={this.onLike} className='list-group-item-label'>
+				<span onClick={onToggleLike} className='list-group-item-label'>
 					{name}
 				</span>
 				<input
@@ -43,11 +44,15 @@ class MovieListItem extends Component {
 					<button
 						type='button'
 						className='btn-cookie btn-sm'
-						onClick={this.onFaourite}
+						onClick={onToggleFavourite}
 					>
 						<i className='fas fa-cookie'></i>
 					</button>
-					<button type='button' className='btn-trash btn-sm'>
+					<button
+						type='button'
+						className='btn-trash btn-sm'
+						onClick={this.props.onDelete}
+					>
 						<i className='fas fa-trash'></i>
 					</button>
 					<div>
