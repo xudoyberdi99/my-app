@@ -27,6 +27,8 @@ class App extends Component {
 					id: 3,
 				},
 			],
+			term: '',
+			filter: 'all',
 		}
 	}
 
@@ -44,6 +46,7 @@ class App extends Component {
 			name,
 			viewers: views,
 			fauorite: false,
+			like: false,
 			id: Date.now(),
 		}
 		this.setState(({ data }) => {
@@ -52,28 +55,68 @@ class App extends Component {
 		})
 	}
 
-	onToggleLike = id => {
-		console.log(`Toggle like for movie with id: ${id}`)
+	onToggleProp = (id, prop) => {
+		console.log(prop)
+
+		this.setState(({ data }) => {
+			const newArr = data.map(item => {
+				if (item.id === id) {
+					return { ...item, [prop]: !item[prop] }
+				}
+				return item
+			})
+			return { data: newArr }
+		})
 	}
 
-	onToggleFavourite = id => {
-		console.log(`Toggle favourite for movie with id: ${id}`)
+	searchHandler = (arr, term) => {
+		if (term.length === 0) {
+			return arr
+		}
+		return arr.filter(item => item.name.toLowerCase().indexOf(term) > -1)
 	}
+
+	filterHandler = (arr, filter) => {
+		switch (filter) {
+			case 'popular':
+				return arr.filter(item => item.like)
+			case 'mostviewed':
+				return arr.filter(item => item.viewers > 200)
+			default:
+				return arr
+		}
+	}
+
+	updateTermHandler = term => this.setState({ term })
+
+	updateFilterHandler = filter => this.setState({ filter })
+
 	render() {
-		const { data } = this.state
+		const { data, term, filter } = this.state
+		const allMoviesCount = data.length
+		const likedMoviesCount = data.filter(item => item.fauorite).length
+		const visibleData = this.filterHandler(
+			this.searchHandler(data, term),
+			filter
+		)
 
 		return (
 			<div className='app font-monospace'>
 				<div className='content'>
-					<AppInfo />
+					<AppInfo
+						allMoviesCount={allMoviesCount}
+						likedMoviesCount={likedMoviesCount}
+					/>
 					<div className='search-panel'>
-						<SearchPanel />
-						<AppFilter />
+						<SearchPanel updateTermHandler={this.updateTermHandler} />
+						<AppFilter
+							filter={filter}
+							updateFilterHandler={this.updateFilterHandler}
+						/>
 					</div>
 					<MovieList
-						onToggleFavourite={this.onToggleFavourite}
-						onToggleLike={this.onToggleLike}
-						data={data}
+						onToggleProp={this.onToggleProp}
+						data={visibleData}
 						onDelete={this.onDelete}
 					/>
 					<MoviesAddForm addForm={this.addForm} />
